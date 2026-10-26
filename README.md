@@ -57,13 +57,13 @@ Vercel 프로젝트 **Settings → Environment Variables**에서 수정한 뒤, 
 
 Render, Railway, 사내 서버처럼 Node를 직접 실행하는 곳에서는:
 
-- 시작 명령: `node server.js` (또는 `npm start`)
+- 시작 명령: `node local-server.js` (또는 `npm start`)
 - 환경변수: `SERVICE_KEY` = 인증키 (포트는 `PORT` 환경변수를 따름)
 
 ## 4. 내 컴퓨터에서만 실행해 보기
 
 ```
-node server.js
+node local-server.js
 ```
 
 브라우저에서 http://localhost:3000 접속. `.env.example`을 `.env`로 바꿔 인증키를 넣으면 실제 데이터가 나옵니다.
@@ -72,10 +72,10 @@ node server.js
 ## 구조
 
 ```
-public/          화면 (index.html, style.css, app.js)
+public/          화면 (index.html, style.css, main.js)
 lib/core.js      공공데이터포털 호출, 응답 정리, 1분 캐시, 예시 데이터
 api/[name].js    Vercel용 서버리스 함수 (/api/products 등)
-server.js        일반 서버용 실행 파일 (로컬, Render 등)
+local-server.js  일반 서버용 실행 파일 (로컬, Render 등)
 vercel.json      Vercel 설정 (서울 리전, 정적 파일 위치)
 .env.example     인증키 설정 예시
 ```

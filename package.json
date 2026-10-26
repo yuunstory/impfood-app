@@ -3,9 +3,9 @@
   "version": "1.1.0",
   "private": true,
   "description": "수입식품 조회 웹앱 (식품의약품안전처 공공데이터 Open API)",
-  "main": "server.js",
+  "main": "local-server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node local-server.js"
   },
   "engines": {
     "node": ">=18"
