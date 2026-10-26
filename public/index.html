@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>수입식품 조회</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="wrap topbar-in">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="22" height="22"><rect x="3" y="6" width="18" height="13" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M3 10h18M8 6V4h8v2" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+      </span>
+      <div>
+        <h1>수입식품 조회</h1>
+        <p class="sub">식품의약품안전처 공공데이터 기반</p>
+      </div>
+    </div>
+    <span id="modeChip" class="chip">연결 확인 중</span>
+  </div>
+</header>
+
+<main class="wrap main">
+  <nav class="tabs" role="tablist">
+    <button class="tab" role="tab" id="tab-products" aria-selected="true" data-tab="products">수입식품 제품</button>
+    <button class="tab" role="tab" id="tab-receipts" aria-selected="false" data-tab="receipts">수입신고 접수</button>
+  </nav>
+
+  <!-- 제품 조회 -->
+  <section id="panel-products" class="panel" role="tabpanel" aria-labelledby="tab-products">
+    <form class="search" id="form-products" autocomplete="off">
+      <div class="field">
+        <label for="p-divs">신고제품구분</label>
+        <select id="p-divs" name="divs">
+          <option value="">전체</option>
+          <option>농.임산물</option>
+          <option>수산물</option>
+          <option>축산물</option>
+          <option>가공식품</option>
+          <option>건강기능식품</option>
+          <option>식품첨가물</option>
+          <option>기구또는용기·포장</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="p-country">제조국</label>
+        <input id="p-country" name="country" placeholder="예: 페루">
+      </div>
+      <div class="field">
+        <label for="p-name">제품명</label>
+        <input id="p-name" name="name" placeholder="영문 제품명 일부">
+      </div>
+      <div class="field">
+        <label for="p-item">품목명</label>
+        <input id="p-item" name="item" placeholder="예: 오징어">
+      </div>
+      <div class="actions">
+        <button type="reset" class="btn ghost">초기화</button>
+        <button type="submit" class="btn primary">조회</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- 수입신고 접수 -->
+  <section id="panel-receipts" class="panel" role="tabpanel" aria-labelledby="tab-receipts" hidden>
+    <form class="search" id="form-receipts" autocomplete="off">
+      <div class="field">
+        <label for="r-no">접수번호</label>
+        <input id="r-no" name="rcptNo" inputmode="numeric" placeholder="예: 202000533392">
+      </div>
+      <div class="field wide">
+        <label for="r-mnft">해외제조업소</label>
+        <input id="r-mnft" name="mnft" placeholder="회사명 일부">
+      </div>
+      <div class="actions">
+        <button type="reset" class="btn ghost">초기화</button>
+        <button type="submit" class="btn primary">조회</button>
+      </div>
+    </form>
+  </section>
+
+  <div class="toolbar">
+    <p class="count" id="count" aria-live="polite">—</p>
+    <div class="tools">
+      <label class="inline" for="rows">표시
+        <select id="rows">
+          <option>10</option><option selected>20</option><option>50</option><option>100</option>
+        </select>
+      </label>
+      <label class="inline" for="auto">자동 새로고침
+        <select id="auto">
+          <option value="0">끔</option>
+          <option value="1">1분</option>
+          <option value="5">5분</option>
+          <option value="10">10분</option>
+          <option value="30">30분</option>
+        </select>
+      </label>
+      <button id="csv" class="btn ghost small" type="button">CSV 저장</button>
+    </div>
+  </div>
+  <p class="meta" id="meta"></p>
+
+  <div class="error" id="error" role="alert" hidden></div>
+
+  <div class="table-wrap">
+    <table id="table">
+      <thead id="thead"></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+
+  <nav class="pager" id="pager" aria-label="페이지"></nav>
+
+  <p class="foot">
+    데이터 출처: 공공데이터포털 식품의약품안전처 Open API (수입식품 제품DB 정보, 수입식품 수입신고 접수 업체, 수입식품 고유제품 상세정보).
+    수입식품정보마루 화면의 일부 항목(수입업체, 수입일자 등)은 공개 API에 없어 표시되지 않습니다.
+  </p>
+</main>
+
+<!-- 상세 패널 -->
+<div class="scrim" id="scrim" hidden></div>
+<aside class="drawer" id="drawer" aria-labelledby="drawerTitle" hidden>
+  <div class="drawer-head">
+    <div>
+      <p class="eyebrow" id="drawerEyebrow">상세</p>
+      <h2 id="drawerTitle">—</h2>
+    </div>
+    <button class="icon-btn" id="drawerClose" type="button" aria-label="닫기">
+      <svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+    </button>
+  </div>
+  <div class="drawer-body" id="drawerBody"></div>
+</aside>
+
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script src="/app.js"></script>
+</body>
+</html>
